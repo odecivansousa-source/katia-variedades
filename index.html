@@ -42,13 +42,20 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <!-- Design System CSS -->
-  <link rel="stylesheet" href="css/styles.css?v=2.4">
+  <link rel="stylesheet" href="css/styles.css?v=2.5">
 </head>
 <body>
 
   <!-- Top Announcement Bar -->
-  <div style="background: #1C1B1A; border-bottom: 1px solid #383330; padding: 0.45rem 1rem; text-align: center; font-size: 0.72rem; letter-spacing: 0.1em; color: #C6A15B; font-weight: 500;">
-    <span>🛵 Entregas em Mossoró e Região • R. Tabelião Aoem Menescal, 64 - Santo Antônio • WhatsApp: (84) 98841-6094</span>
+  <div class="top-announcement-bar">
+    <div class="container top-announcement-content">
+      <span>🛵 Entregas em Mossoró e Região</span>
+      <span style="opacity: 0.5;">•</span>
+      <a href="https://wa.me/5584988416094" target="_blank" rel="noopener" class="announcement-link">
+        <i data-lucide="message-circle" style="width: 12px; height: 12px; color: #25D366;"></i>
+        <span>WhatsApp: (84) 98841-6094</span>
+      </a>
+    </div>
   </div>
 
   <!-- Header -->
@@ -56,9 +63,9 @@
     <div class="container">
       <div class="navbar">
         <!-- Brand Logo -->
-        <a href="#" class="brand" aria-label="Página Inicial Kátia Variedades" style="display: flex; align-items: center; gap: 0.65rem; text-decoration: none;">
-          <img src="images/logo-circle.png" alt="Logo Kátia Variedades" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 1.5px solid #C6A15B; box-shadow: 0 0 12px rgba(198, 161, 91, 0.25);">
-          <div>
+        <a href="#" class="brand" aria-label="Página Inicial Kátia Variedades">
+          <img src="images/logo-circle.png" alt="Logo Kátia Variedades" class="brand-logo-img">
+          <div class="brand-text-group">
             <div class="brand-title">
               <span>KÁTIA</span>
               <span class="brand-dot"></span>
@@ -69,8 +76,8 @@
 
         <!-- Header Actions -->
         <div class="nav-actions">
-          <!-- Admin Panel Link -->
-          <a href="admin.html" class="nav-btn" aria-label="Gerenciar Catálogo" title="Painel da Loja">
+          <!-- Admin Panel Link (Discreto no mobile, visível no desktop) -->
+          <a href="admin.html" class="nav-btn nav-btn-admin" aria-label="Gerenciar Catálogo" title="Painel da Loja">
             <i data-lucide="sliders-horizontal" style="width: 17px; height: 17px;"></i>
           </a>
 
@@ -123,16 +130,17 @@
           </h1>
 
           <p class="hero-desc">
-            As melhores marcas reunidas em um só lugar: Diamantes Lingerie, Moda Praia com Proteção UV, Kactus Masculino, Alfaiataria e Juvenil Streetwear. Peças selecionadas com carinho e entrega rápida.
+            Diamantes Lingerie, Moda Praia UV, Kactus Masculino, Juvenil e Cama, Mesa e Banho. Peças selecionadas com carinho e entrega rápida.
           </p>
 
           <div class="hero-actions">
             <a href="#catalogo" class="btn-primary">
               <span>Explorar Catálogo</span>
-              <i data-lucide="arrow-right" style="width: 16px; height: 16px;"></i>
+              <i data-lucide="arrow-down" style="width: 15px; height: 15px;"></i>
             </a>
-            <a href="#sobre-loja" class="btn-secondary">
-              <span>Horários & Loja Física</span>
+            <a href="https://wa.me/5584988416094" target="_blank" rel="noopener" class="btn-secondary">
+              <i data-lucide="message-circle" style="width: 15px; height: 15px; color: #25D366;"></i>
+              <span>Falar no WhatsApp</span>
             </a>
           </div>
         </div>
@@ -146,6 +154,10 @@
             onerror="if (this.dataset.fallback !== '1') { this.dataset.fallback = '1'; this.src = window.AURUM_FALLBACK_IMG; }"
           >
           <div class="hero-gradient-overlay"></div>
+          <div class="hero-floating-badge">
+            <span class="badge-dot-live"></span>
+            <span>Loja Aberta • Faça seu Pedido</span>
+          </div>
         </div>
       </div>
     </div>
@@ -423,6 +435,6 @@
   </footer>
 
   <!-- App Scripts -->
-  <script type="module" src="js/app.js?v=2.4"></script>
+  <script type="module" src="js/app.js?v=2.5"></script>
 </body>
 </html>
