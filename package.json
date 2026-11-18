@@ -1,0 +1,20 @@
+{
+  "name": "catalogo-digital-moda-aurum",
+  "version": "1.0.0",
+  "description": "Catálogo digital de moda elegante e contemporâneo com finalização via WhatsApp",
+  "type": "module",
+  "scripts": {
+    "start": "npx.cmd serve -l 3000",
+    "dev": "npx.cmd serve -l 3000"
+  },
+  "keywords": [
+    "catalogo",
+    "moda",
+    "fashion",
+    "ecommerce",
+    "whatsapp",
+    "responsive"
+  ],
+  "author": "AURUM Atelier",
+  "license": "MIT"
+}

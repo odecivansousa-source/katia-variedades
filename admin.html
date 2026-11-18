@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <meta name="theme-color" content="#111214">
+  <meta name="description" content="AURUM Atelier — Painel Administrativo de Gerenciamento de Produtos e Catálogo.">
+  
+  <title>AURUM Atelier — Painel de Gerenciamento da Loja</title>
+
+  <!-- Google Fonts: Cormorant Garamond & Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Design System CSS -->
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+
+  <!-- Top Announcement Bar -->
+  <div style="background: #1C1B1A; border-bottom: 1px solid #383330; padding: 0.45rem 1rem; text-align: center; font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: #C6A15B; font-weight: 500;">
+    <span>Área Administrativa • Kátia Variedades • Gestão de Catálogo • Mossoró / RN</span>
+  </div>
+
+  <!-- Admin Header -->
+  <header class="header-wrapper">
+    <div class="container">
+      <div class="admin-navbar">
+        <div class="admin-brand-group">
+          <a href="index.html" class="brand" aria-label="Voltar à Vitrine">
+            <div class="brand-title">
+              <span>KÁTIA</span>
+              <span class="brand-dot"></span>
+            </div>
+            <span class="brand-subtitle">VARIEDADES • PAINEL</span>
+          </a>
+          <span class="admin-tag">Gerenciar Loja</span>
+        </div>
+
+        <div class="admin-nav-actions">
+          <button type="button" class="btn-secondary" id="btnOpenCoverModal" style="font-size: 0.78rem; padding: 0.55rem 0.9rem;" title="Editar Foto de Capa da Vitrine">
+            <i data-lucide="image" style="width: 15px; height: 15px;"></i>
+            <span class="hide-mobile">Foto de Capa</span>
+          </button>
+
+          <button type="button" class="btn-secondary" id="btnOpenChangePassModal" style="font-size: 0.78rem; padding: 0.55rem 0.9rem;" title="Alterar Senha do Painel">
+            <i data-lucide="key" style="width: 15px; height: 15px;"></i>
+            <span class="hide-mobile">Senha</span>
+          </button>
+
+          <a href="index.html" class="btn-secondary" style="font-size: 0.78rem; padding: 0.55rem 0.9rem;" title="Ver Vitrine Pública">
+            <i data-lucide="eye" style="width: 15px; height: 15px;"></i>
+            <span class="hide-mobile">Ver Vitrine</span>
+          </a>
+
+          <button type="button" class="btn-secondary" id="btnAdminLogout" style="font-size: 0.78rem; padding: 0.55rem 0.9rem; color: #E58080;" title="Sair do Painel">
+            <i data-lucide="log-out" style="width: 15px; height: 15px;"></i>
+            <span class="hide-mobile">Sair</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Admin Main Content -->
+  <main class="container" style="padding-top: 1rem; padding-bottom: 4rem;">
+
+    <!-- Summary KPIs -->
+    <section class="admin-summary-grid">
+      <div class="kpi-card kpi-gold">
+        <div>
+          <div class="kpi-title">Total Cadastrados</div>
+          <div class="kpi-value" id="kpiTotal">0</div>
+        </div>
+        <div class="kpi-icon-wrap">
+          <i data-lucide="package" style="width: 22px; height: 22px;"></i>
+        </div>
+      </div>
+
+      <div class="kpi-card kpi-active">
+        <div>
+          <div class="kpi-title">Produtos Ativos</div>
+          <div class="kpi-value" id="kpiActive" style="color: #78B880;">0</div>
+        </div>
+        <div class="kpi-icon-wrap" style="color: #78B880;">
+          <i data-lucide="check-circle" style="width: 22px; height: 22px;"></i>
+        </div>
+      </div>
+
+      <div class="kpi-card kpi-hidden">
+        <div>
+          <div class="kpi-title">Produtos Ocultos</div>
+          <div class="kpi-value" id="kpiHidden" style="color: var(--text-secondary);">0</div>
+        </div>
+        <div class="kpi-icon-wrap" style="color: var(--text-secondary);">
+          <i data-lucide="eye-off" style="width: 22px; height: 22px;"></i>
+        </div>
+      </div>
+    </section>
+
+    <!-- Action Bar (Search, Filters, Cadastrar) -->
+    <section class="admin-action-bar">
+      <div class="admin-search-wrapper">
+        <i data-lucide="search" class="admin-search-icon" style="width: 17px; height: 17px;"></i>
+        <input 
+          type="text" 
+          id="adminSearchInput" 
+          class="admin-search-input" 
+          placeholder="Buscar peça por nome ou tag..." 
+          autocomplete="off"
+        >
+      </div>
+
+      <div class="admin-filter-group">
+        <select id="adminFilterStatus" class="admin-filter-select" aria-label="Filtrar por Status">
+          <option value="all">Todos os Status</option>
+          <option value="active">Apenas Ativos</option>
+          <option value="hidden">Apenas Ocultos</option>
+        </select>
+
+        <select id="adminFilterCategory" class="admin-filter-select" aria-label="Filtrar por Categoria">
+          <!-- Preenchido via JS -->
+        </select>
+
+        <button class="btn-primary" id="btnNewProduct" style="font-size: 0.8rem; padding: 0.65rem 1.25rem;">
+          <i data-lucide="plus" style="width: 16px; height: 16px;"></i>
+          <span>Cadastrar Peça</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- Products List (Table Desktop / Cards Mobile) -->
+    <section class="admin-table-container">
+      <!-- Desktop Table -->
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th style="width: 40%;">Peça / Detalhes</th>
+            <th style="width: 20%;">Categoria</th>
+            <th style="width: 15%;">Preço</th>
+            <th style="width: 12%;">Status</th>
+            <th style="width: 13%; text-align: right;">Ações</th>
+          </tr>
+        </thead>
+        <tbody id="adminTableBody">
+          <!-- Renderizado dinamicamente via JS -->
+        </tbody>
+      </table>
+
+      <!-- Mobile Cards List -->
+      <div class="admin-mobile-cards" id="adminMobileCards">
+        <!-- Renderizado dinamicamente via JS -->
+      </div>
+
+      <!-- Empty State -->
+      <div id="adminEmptyState" style="display: none; padding: 4rem 1.5rem; text-align: center;">
+        <i data-lucide="inbox" style="width: 48px; height: 48px; color: var(--gold); margin: 0 auto 1rem auto; opacity: 0.6;"></i>
+        <h3 class="font-serif" style="font-size: 1.4rem; color: var(--text-primary); margin-bottom: 0.4rem;">Nenhuma peça encontrada</h3>
+        <p style="color: var(--text-secondary); font-size: 0.88rem; max-width: 320px; margin: 0 auto;">Tente alterar os filtros ou cadastre um novo produto para o catálogo.</p>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Product Create / Edit Modal -->
+  <div class="admin-form-modal" id="adminFormModal" role="dialog" aria-modal="true" aria-labelledby="adminModalTitle">
+    <div class="admin-modal-card">
+      <div class="sheet-pill"></div>
+
+      <!-- Modal Header -->
+      <div class="admin-modal-header">
+        <h2 class="admin-modal-title" id="adminModalTitle">Cadastrar Nova Peça</h2>
+        <button class="modal-close-btn" id="adminFormCloseBtn" aria-label="Fechar formulário" style="position: static;">
+          <i data-lucide="x" style="width: 18px; height: 18px;"></i>
+        </button>
+      </div>
+
+      <!-- Form Body -->
+      <form id="productForm" class="admin-modal-body">
+        
+        <!-- Photo Upload Box -->
+        <div class="form-group">
+          <label class="form-label">Foto do Produto (Dispositivo ou Galeria)</label>
+          <div class="photo-upload-area" id="photoUploadArea">
+            <input type="file" id="prodFileInput" accept="image/*" style="display: none;">
+            
+            <div class="photo-preview-container">
+              <img src="" alt="Prévia" id="photoPreview" class="photo-preview-img">
+              
+              <div class="photo-upload-hint">
+                <span style="font-weight: 600; color: var(--text-primary); font-size: 0.88rem;">Selecione uma imagem do seu dispositivo</span>
+                <span style="color: var(--text-secondary); font-size: 0.75rem;">Formatos aceitos: JPG, PNG, WEBP. Proporção vertical recomendada.</span>
+                
+                <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem;">
+                  <label for="prodFileInput" class="btn-upload-file">
+                    <i data-lucide="upload" style="width: 14px; height: 14px;"></i>
+                    <span>Escolher Foto</span>
+                  </label>
+                  <button type="button" class="btn-upload-file" id="btnRemovePhoto" style="display: none; color: #FF8585;">
+                    <i data-lucide="trash" style="width: 14px; height: 14px;"></i>
+                    <span>Remover</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- URL Alternativa Opcional -->
+          <div style="margin-top: 0.4rem;">
+            <input 
+              type="url" 
+              id="prodImageUrl" 
+              class="form-input" 
+              placeholder="Ou cole uma URL direta da imagem (opcional)..." 
+              style="font-size: 0.78rem; padding: 0.5rem 0.75rem;"
+            >
+          </div>
+        </div>
+
+        <!-- Name & Category -->
+        <div class="form-row-2">
+          <div class="form-group">
+            <label class="form-label" for="prodName">Nome da Peça *</label>
+            <input type="text" id="prodName" class="form-input" placeholder="Ex: Vestido Midi Seda Champagne" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="prodCategory">Categoria *</label>
+            <select id="prodCategory" class="form-select" required>
+              <!-- Preenchido via JS -->
+            </select>
+          </div>
+        </div>
+
+        <!-- Price & Promotional Price -->
+        <div class="form-row-2">
+          <div class="form-group">
+            <label class="form-label" for="prodPrice">Preço (R$) *</label>
+            <input type="number" id="prodPrice" class="form-input" placeholder="0.00" step="0.01" min="0" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="prodOriginalPrice">Preço Promocional Antigo / De (Opcional)</label>
+            <input type="number" id="prodOriginalPrice" class="form-input" placeholder="Deixe em branco se não houver" step="0.01" min="0">
+          </div>
+        </div>
+
+        <!-- Badge & Composition -->
+        <div class="form-row-2">
+          <div class="form-group">
+            <label class="form-label" for="prodBadge">Selo de Destaque (Opcional)</label>
+            <input type="text" id="prodBadge" class="form-input" placeholder="Ex: Lançamento, Exclusivo, Must-Have">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="prodComposition">Composição Têxtil</label>
+            <input type="text" id="prodComposition" class="form-input" placeholder="Ex: 100% Seda Mista Acetinada">
+          </div>
+        </div>
+
+        <!-- Description -->
+        <div class="form-group">
+          <label class="form-label" for="prodDesc">Descrição Editorial</label>
+          <textarea id="prodDesc" class="form-textarea" rows="3" placeholder="Descreva os cortes, detalhes da modelagem e diferenciais da peça..."></textarea>
+        </div>
+
+        <!-- Sizes Selection -->
+        <div class="form-group">
+          <label class="form-label">Tamanhos Disponíveis</label>
+          <div class="chip-grid" id="sizeChipsContainer">
+            <!-- Renderizado via JS -->
+          </div>
+          
+          <!-- Custom Size Input -->
+          <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem; max-width: 240px;">
+            <input type="text" id="customSizeInput" class="form-input" placeholder="Outro tamanho (ex: 46)" style="font-size: 0.78rem; padding: 0.4rem 0.6rem;">
+            <button type="button" class="btn-secondary" id="btnAddCustomSize" style="padding: 0.4rem 0.75rem; font-size: 0.75rem;">+ Adicionar</button>
+          </div>
+        </div>
+
+        <!-- Colors Selection -->
+        <div class="form-group">
+          <label class="form-label">Cores Disponíveis</label>
+          <div class="chip-grid" id="colorChipsContainer">
+            <!-- Renderizado via JS -->
+          </div>
+
+          <!-- Custom Color Adder -->
+          <div style="display: flex; align-items: center; gap: 0.5rem; margin-top: 0.5rem; flex-wrap: wrap;">
+            <input type="color" id="customColorHex" value="#C6A15B" style="width: 36px; height: 34px; border: 1px solid var(--border); background: var(--bg-card); border-radius: var(--radius-sm); cursor: pointer;">
+            <input type="text" id="customColorName" class="form-input" placeholder="Nome da cor (ex: Azul Noite)" style="font-size: 0.78rem; padding: 0.4rem 0.6rem; max-width: 200px;">
+            <button type="button" class="btn-secondary" id="btnAddCustomColor" style="padding: 0.4rem 0.75rem; font-size: 0.75rem;">+ Adicionar Cor</button>
+          </div>
+        </div>
+
+        <!-- Publish Status Checkbox -->
+        <div class="form-group" style="padding: 0.75rem 1rem; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-sm);">
+          <label style="display: flex; align-items: center; gap: 0.65rem; cursor: pointer; user-select: none;">
+            <input type="checkbox" id="prodActive" checked style="accent-color: var(--gold); width: 18px; height: 18px;">
+            <div>
+              <span style="font-size: 0.85rem; font-weight: 600; color: var(--text-primary); display: block;">Publicar imediatamente na vitrine</span>
+              <span style="font-size: 0.72rem; color: var(--text-secondary);">Se desmarcado, o produto ficará salvo como oculto para publicação posterior.</span>
+            </div>
+          </label>
+        </div>
+
+      </form>
+
+      <!-- Modal Footer -->
+      <div class="admin-modal-footer">
+        <button type="button" class="btn-secondary" id="btnCancelForm">Cancelar</button>
+        <button type="submit" form="productForm" class="btn-primary">
+          <i data-lucide="check" style="width: 16px; height: 16px;"></i>
+          <span>Salvar Peça</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete Confirmation Dialog -->
+  <div class="confirm-backdrop" id="confirmDialog" role="dialog" aria-modal="true">
+    <div class="confirm-box">
+      <i data-lucide="alert-triangle" class="confirm-icon"></i>
+      <h3 class="confirm-title">Excluir Produto</h3>
+      <p class="confirm-text" id="confirmDeleteName">Tem certeza que deseja excluir esta peça?</p>
+      
+      <div class="confirm-actions">
+        <button type="button" class="btn-secondary" id="btnCancelDelete">Cancelar</button>
+        <button type="button" class="btn-danger" id="btnConfirmDelete">Sim, Excluir</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Editar Foto de Capa da Loja (Hero Banner) -->
+  <div class="admin-form-modal" id="adminCoverModal" role="dialog" aria-modal="true" aria-labelledby="coverModalTitle">
+    <div class="admin-modal-card" style="max-width: 580px;">
+      <div class="sheet-pill"></div>
+
+      <div class="admin-modal-header">
+        <div>
+          <h2 class="admin-modal-title" id="coverModalTitle">Foto de Capa da Vitrine</h2>
+          <p style="color: var(--text-secondary); font-size: 0.78rem; margin-top: 2px;">Altere o banner principal exibido no topo do catálogo digital.</p>
+        </div>
+        <button class="modal-close-btn" id="coverModalCloseBtn" aria-label="Fechar" style="position: static;">
+          <i data-lucide="x" style="width: 18px; height: 18px;"></i>
+        </button>
+      </div>
+
+      <div class="admin-modal-body">
+        <div class="cover-preview-box">
+          <img src="images/fachada-katia.jpg" alt="Prévia da Foto de Capa" id="adminCoverPreview" class="cover-preview-img">
+          <span class="cover-preview-badge">Prévia da Capa Atual</span>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Carregar Foto do Dispositivo (Celular ou Computador)</label>
+          <input type="file" id="coverFileInput" accept="image/*" style="display: none;">
+          <div style="display: flex; gap: 0.6rem; flex-wrap: wrap;">
+            <label for="coverFileInput" class="btn-primary" style="font-size: 0.8rem; padding: 0.65rem 1.25rem; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
+              <i data-lucide="upload" style="width: 15px; height: 15px;"></i>
+              <span>Escolher Nova Foto</span>
+            </label>
+            <button type="button" class="btn-secondary" id="btnResetCover" style="font-size: 0.8rem; padding: 0.65rem 1rem;">
+              <i data-lucide="rotate-ccw" style="width: 14px; height: 14px;"></i>
+              <span>Restaurar Fachada Original</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="form-group" style="margin-top: 1rem;">
+          <label class="form-label" for="coverImageUrl">Ou digite o link/URL da imagem</label>
+          <input 
+            type="url" 
+            id="coverImageUrl" 
+            class="form-input" 
+            placeholder="https://exemplo.com/sua-foto-de-capa.jpg"
+          >
+        </div>
+      </div>
+
+      <div class="admin-modal-footer">
+        <button type="button" class="btn-secondary" id="btnCancelCover">Cancelar</button>
+        <button type="button" class="btn-primary" id="btnSaveCover">
+          <i data-lucide="check" style="width: 16px; height: 16px;"></i>
+          <span>Salvar Foto de Capa</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Alterar Senha do Painel -->
+  <div class="admin-form-modal" id="adminChangePassModal" role="dialog" aria-modal="true" aria-labelledby="passModalTitle">
+    <div class="admin-modal-card" style="max-width: 440px;">
+      <div class="sheet-pill"></div>
+
+      <div class="admin-modal-header">
+        <div>
+          <h2 class="admin-modal-title" id="passModalTitle">Segurança & Senha</h2>
+          <p style="color: var(--text-secondary); font-size: 0.78rem; margin-top: 2px;">Atualize a senha de acesso ao painel de gerenciamento.</p>
+        </div>
+        <button class="modal-close-btn" id="changePassCloseBtn" aria-label="Fechar" style="position: static;">
+          <i data-lucide="x" style="width: 18px; height: 18px;"></i>
+        </button>
+      </div>
+
+      <form id="changePassForm" class="admin-modal-body">
+        <div class="form-group">
+          <label class="form-label" for="currentPassInput">Senha Atual *</label>
+          <input type="password" id="currentPassInput" class="form-input" placeholder="Digite sua senha atual" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="newPassInput">Nova Senha * (mínimo 4 dígitos)</label>
+          <input type="password" id="newPassInput" class="form-input" placeholder="Digite a nova senha" required minlength="4">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="confirmNewPassInput">Confirmar Nova Senha *</label>
+          <input type="password" id="confirmNewPassInput" class="form-input" placeholder="Repita a nova senha" required minlength="4">
+        </div>
+
+        <div id="changePassError" class="auth-error-msg" style="margin-bottom: 0.5rem;"></div>
+      </form>
+
+      <div class="admin-modal-footer">
+        <button type="button" class="btn-secondary" id="btnCancelChangePass">Cancelar</button>
+        <button type="submit" form="changePassForm" class="btn-primary" id="btnSaveNewPass">
+          <i data-lucide="lock" style="width: 15px; height: 15px;"></i>
+          <span>Atualizar Senha</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tela de Bloqueio por Senha (Auth Gate) -->
+  <div class="admin-auth-overlay" id="adminAuthOverlay" role="dialog" aria-modal="true" aria-labelledby="authTitle">
+    <div class="admin-auth-card">
+      <div class="auth-lock-icon">
+        <i data-lucide="shield-check" style="width: 26px; height: 26px;"></i>
+      </div>
+
+      <h2 class="admin-auth-title" id="authTitle">Acesso Restrito</h2>
+      <p class="admin-auth-desc" id="authDesc">
+        Kátia Variedades • Área Administrativa.<br>
+        Informe a senha da loja para gerenciar os produtos e o catálogo.
+      </p>
+
+      <form id="adminAuthForm">
+        <div class="auth-input-group">
+          <div class="auth-input-wrapper">
+            <input 
+              type="password" 
+              id="adminAuthPassword" 
+              class="auth-input" 
+              placeholder="Digite a senha de acesso..." 
+              required
+              autocomplete="current-password"
+            >
+            <button type="button" class="btn-toggle-eye" id="btnToggleAuthPass" aria-label="Mostrar ou ocultar senha">
+              <i data-lucide="eye" style="width: 18px; height: 18px;"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Campo de Confirmação (Exibido apenas no Primeiro Acesso) -->
+        <div class="auth-input-group" id="setupConfirmWrapper" style="display: none;">
+          <div class="auth-input-wrapper">
+            <input 
+              type="password" 
+              id="adminAuthConfirm" 
+              class="auth-input" 
+              placeholder="Confirme a nova senha..." 
+              autocomplete="new-password"
+            >
+          </div>
+        </div>
+
+        <div class="auth-error-msg" id="adminAuthError" style="margin-bottom: 0.75rem;">Senha incorreta. Tente novamente.</div>
+
+        <button type="submit" id="btnAuthSubmit" class="btn-primary" style="width: 100%; padding: 0.85rem; font-size: 0.88rem; justify-content: center; margin-top: 0.25rem;">
+          <i data-lucide="unlock" style="width: 16px; height: 16px;"></i>
+          <span id="btnAuthSubmitText">Entrar no Painel</span>
+        </button>
+      </form>
+
+      <div style="margin-top: 1.5rem; border-top: 1px solid var(--border); padding-top: 1rem;">
+        <a href="index.html" style="font-size: 0.78rem; color: var(--text-secondary); text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
+          <i data-lucide="arrow-left" style="width: 14px; height: 14px;"></i>
+          <span>Retornar à Vitrine da Loja</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Footer -->
+  <footer class="site-footer" style="margin-top: 3rem;">
+    <div class="container" style="text-align: center; color: var(--text-secondary); font-size: 0.78rem;">
+      <p>© 2026 Kátia Variedades — Painel de Gestão da Loja • Mossoró / RN.</p>
+      <p style="margin-top: 0.35rem;">
+        <a href="index.html" class="text-gold" style="font-weight: 500;">← Retornar à Vitrine Pública do Catálogo</a>
+      </p>
+    </div>
+  </footer>
+
+  <!-- Admin Application Script -->
+  <script type="module" src="js/admin.js"></script>
+</body>
+</html>

@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <meta name="theme-color" content="#111214">
+  <meta name="description" content="Kátia Variedades — Catálogo Digital de Moda Feminina, Masculina, Lingeries das melhores marcas (Diamantes, Del Rayssa), Moda Praia UV e Juvenil em Mossoró/RN.">
+  
+  <title>Kátia Variedades — Moda & Catálogo Digital Oficial</title>
+
+  <!-- Google Fonts: Cormorant Garamond & Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Design System CSS -->
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <!-- Top Announcement Bar -->
+  <div style="background: #1C1B1A; border-bottom: 1px solid #383330; padding: 0.45rem 1rem; text-align: center; font-size: 0.72rem; letter-spacing: 0.1em; color: #C6A15B; font-weight: 500;">
+    <span>🛵 Entregas em Mossoró e Região • R. Tabelião Aoem Menescal, 64 - Santo Antônio • WhatsApp: (84) 98841-6094</span>
+  </div>
+
+  <!-- Header -->
+  <header class="header-wrapper">
+    <div class="container">
+      <div class="navbar">
+        <!-- Brand Logo -->
+        <a href="#" class="brand" aria-label="Página Inicial Kátia Variedades">
+          <div class="brand-title">
+            <span>KÁTIA</span>
+            <span class="brand-dot"></span>
+          </div>
+          <span class="brand-subtitle">VARIEDADES • MODA & VAREJO</span>
+        </a>
+
+        <!-- Header Actions -->
+        <div class="nav-actions">
+          <!-- Admin Panel Link -->
+          <a href="admin.html" class="nav-btn" aria-label="Gerenciar Catálogo" title="Painel da Loja">
+            <i data-lucide="sliders-horizontal" style="width: 17px; height: 17px;"></i>
+          </a>
+
+          <!-- Search Toggle -->
+          <button class="nav-btn" id="searchToggleBtn" aria-label="Abrir busca de produtos" title="Pesquisar">
+            <i data-lucide="search" style="width: 18px; height: 18px;"></i>
+          </button>
+
+          <!-- Cart Toggle -->
+          <button class="nav-btn" id="cartToggleBtn" aria-label="Abrir sacola de compras" title="Sacola de Compras">
+            <i data-lucide="shopping-bag" style="width: 18px; height: 18px;"></i>
+            <span class="cart-badge" id="cartBadge" style="display: none;">0</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Collapsible Search Bar -->
+    <div class="search-container" id="searchContainer">
+      <div class="container">
+        <div class="search-input-wrapper">
+          <i data-lucide="search" class="search-icon" style="width: 18px; height: 18px;"></i>
+          <input 
+            type="text" 
+            id="searchInput" 
+            class="search-input" 
+            placeholder="Buscar por lingerie, bermuda, camisa, moda praia UV..." 
+            autocomplete="off"
+          >
+          <button class="search-clear-btn" id="searchClearBtn" aria-label="Limpar pesquisa">
+            <i data-lucide="x" style="width: 16px; height: 16px;"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Banner -->
+  <section class="hero-banner">
+    <div class="container">
+      <div class="hero-grid">
+        <div class="hero-content">
+          <div class="hero-pill">
+            <i data-lucide="sparkles" style="width: 12px; height: 12px; color: var(--gold);"></i>
+            <span>Novidades da Semana • Mossoró / RN</span>
+          </div>
+
+          <h1 class="hero-title">
+            Moda para toda a família com estilo e <em>autenticidade</em>.
+          </h1>
+
+          <p class="hero-desc">
+            As melhores marcas reunidas em um só lugar: Diamantes Lingerie, Moda Praia com Proteção UV, Kactus Masculino, Alfaiataria e Juvenil Streetwear. Peças selecionadas com carinho e entrega rápida.
+          </p>
+
+          <div class="hero-actions">
+            <a href="#catalogo" class="btn-primary">
+              <span>Explorar Catálogo</span>
+              <i data-lucide="arrow-right" style="width: 16px; height: 16px;"></i>
+            </a>
+            <a href="#sobre-loja" class="btn-secondary">
+              <span>Horários & Loja Física</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="hero-visual">
+          <img 
+            id="heroCoverImg"
+            src="images/fachada-katia.jpg" 
+            alt="Fachada e Loja Kátia Variedades" 
+            class="hero-img"
+            onerror="if (this.dataset.fallback !== '1') { this.dataset.fallback = '1'; this.src = window.AURUM_FALLBACK_IMG; }"
+          >
+          <div class="hero-gradient-overlay"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sticky Categories Navigation -->
+  <nav class="category-section" aria-label="Categorias de roupas">
+    <div class="container">
+      <div class="category-scroll-container" id="categoriesContainer">
+        <!-- Renderizado dinamicamente via JS -->
+      </div>
+    </div>
+  </nav>
+
+  <!-- Curated News Strip -->
+  <section class="news-strip" id="novidades">
+    <div class="container">
+      <div class="curated-banner">
+        <div>
+          <span class="section-label">
+            <i data-lucide="award" style="width: 13px; height: 13px;"></i>
+            Marcas de Excelência
+          </span>
+          <h2 class="curated-title">Diamantes Lingerie, Del Rayssa, Kactus & Moda Juvenil</h2>
+          <p class="curated-text">Trabalhamos com marcas consagradas, tecidos nobres, proteção solar UV 50+ e opções para todos os estilos e tamanhos.</p>
+        </div>
+        <a href="#catalogo" class="btn-secondary" style="padding: 0.65rem 1.25rem; font-size: 0.78rem;">
+          <span>Ver Todas as Peças</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Products Catalog -->
+  <main class="products-section container" id="catalogo">
+    <header class="section-header">
+      <div>
+        <span class="section-label">
+          <i data-lucide="sparkles" style="width: 13px; height: 13px;"></i>
+          Catálogo Exclusivo
+        </span>
+        <h2 class="section-title">Vitrine de Roupas</h2>
+        <p class="section-subtitle">Toque nas peças para escolher tamanho, cor e adicionar à sua sacola.</p>
+      </div>
+
+      <div style="margin-top: 0.75rem;">
+        <span class="text-muted" style="font-size: 0.82rem;" id="catalogCount">Carregando catálogo...</span>
+      </div>
+    </header>
+
+    <!-- Product Grid -->
+    <div class="products-grid" id="productsGrid">
+      <!-- Inserido dinamicamente via JS -->
+    </div>
+  </main>
+
+  <!-- Product Detail & Customization Modal (Bottom Sheet on Mobile) -->
+  <div class="modal-backdrop" id="productModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-content">
+      <div class="sheet-pill"></div>
+      
+      <button class="modal-close-btn" id="modalCloseBtn" aria-label="Fechar detalhes do produto">
+        <i data-lucide="x" style="width: 18px; height: 18px;"></i>
+      </button>
+
+      <div class="modal-grid">
+        <div class="modal-gallery">
+          <img src="" alt="" id="modalImg" class="modal-main-img">
+        </div>
+
+        <div class="modal-details">
+          <span class="modal-category" id="modalCategory">CATEGORIA</span>
+          <h2 class="modal-title" id="modalTitle">Nome do Produto</h2>
+
+          <div class="modal-price-box">
+            <span class="modal-price" id="modalPrice">R$ 0,00</span>
+            <span class="modal-original-price" id="modalOriginalPrice">R$ 0,00</span>
+          </div>
+
+          <p class="modal-desc" id="modalDesc">Descrição refinada do produto.</p>
+          <div class="modal-composition" id="modalComposition">Composição nobre</div>
+
+          <!-- Select Size -->
+          <div class="selector-group">
+            <div class="selector-label">
+              <span>Tamanho</span>
+              <span class="selected-value" id="selectedSizeLabel">M</span>
+            </div>
+            <div class="size-options" id="sizeOptionsContainer">
+              <!-- Renderizado via JS -->
+            </div>
+          </div>
+
+          <!-- Select Color -->
+          <div class="selector-group">
+            <div class="selector-label">
+              <span>Cor</span>
+              <span class="selected-value" id="selectedColorLabel">Preto</span>
+            </div>
+            <div class="color-options" id="colorOptionsContainer">
+              <!-- Renderizado via JS -->
+            </div>
+          </div>
+
+          <!-- Modal Actions: Quantity & Add Button -->
+          <div class="modal-actions">
+            <div class="qty-control">
+              <button class="qty-btn" id="modalQtyMinus" aria-label="Diminuir quantidade">−</button>
+              <input type="text" id="modalQtyInput" class="qty-input" value="1" readonly aria-label="Quantidade selecionada">
+              <button class="qty-btn" id="modalQtyPlus" aria-label="Aumentar quantidade">+</button>
+            </div>
+
+            <button class="btn-modal-add" id="btnModalAdd">
+              <i data-lucide="shopping-bag" style="width: 18px; height: 18px;"></i>
+              <span>Adicionar à Sacola</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Shopping Cart Drawer -->
+  <div class="cart-backdrop" id="cartBackdrop">
+    <aside class="cart-drawer" id="cartDrawer" role="dialog" aria-modal="true" aria-label="Sacola de Compras">
+      <!-- Cart Header -->
+      <div class="cart-header">
+        <div class="cart-header-title">
+          <span>Sua Sacola</span>
+          <span class="cart-header-count" id="cartHeaderCount">0 itens</span>
+        </div>
+        <button class="cart-close-btn" id="cartCloseBtn" aria-label="Fechar sacola">
+          <i data-lucide="x" style="width: 20px; height: 20px;"></i>
+        </button>
+      </div>
+
+      <!-- Cart Items List -->
+      <div class="cart-items-list" id="cartItemsList">
+        <!-- Renderizado dinamicamente via JS -->
+      </div>
+
+      <!-- Cart Footer / Checkout -->
+      <div class="cart-footer">
+        <!-- Client Info Inputs (Optional) -->
+        <div class="cart-client-inputs">
+          <input 
+            type="text" 
+            id="clientNameInput" 
+            class="input-field" 
+            placeholder="Seu nome (opcional)" 
+            autocomplete="name"
+          >
+          <input 
+            type="text" 
+            id="clientNotesInput" 
+            class="input-field" 
+            placeholder="Cidade / Estado ou Observações (opcional)"
+          >
+        </div>
+
+        <div class="cart-summary-row">
+          <span>Subtotal</span>
+          <span id="cartSubtotal">R$ 0,00</span>
+        </div>
+
+        <div class="cart-summary-row" style="font-size: 0.78rem;">
+          <span>Atendimento & Envio</span>
+          <span class="text-gold">A combinar</span>
+        </div>
+
+        <div class="cart-summary-total">
+          <span>Total Estimado</span>
+          <span class="total-amount" id="cartTotal">R$ 0,00</span>
+        </div>
+
+        <!-- WhatsApp Checkout Button -->
+        <button class="btn-whatsapp-checkout" id="btnWhatsappCheckout">
+          <svg style="width: 20px; height: 20px; fill: currentColor;" viewBox="0 0 24 24">
+            <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.669-.699c.969.587 1.772.88 2.791.88 3.181 0 5.767-2.587 5.767-5.766.001-3.181-2.585-5.766-5.767-5.766zm9.969 5.766c0 5.518-4.482 10-10 10-1.748 0-3.385-.45-4.814-1.238l-7.186 1.883 1.916-6.994c-.878-1.487-1.386-3.218-1.386-5.066 0-5.517 4.482-10 10-10 5.518 0 10 4.483 10 10z"/>
+          </svg>
+          <span>Finalizar Pedido no WhatsApp</span>
+        </button>
+
+        <p class="checkout-disclaimer">
+          <i data-lucide="shield-check" style="width: 14px; height: 14px; color: var(--gold);"></i>
+          <span>Você será direcionado diretamente ao nosso atendimento humano.</span>
+        </p>
+      </div>
+    </aside>
+  </div>
+
+  <!-- Mobile Floating Cart Button -->
+  <div class="mobile-cart-floater" id="mobileCartFloater">
+    <button class="btn-floating-cart" id="btnMobileCart" aria-label="Abrir sacola de compras">
+      <i data-lucide="shopping-bag" style="width: 18px; height: 18px;"></i>
+      <span>Sacola (<span id="mobileCartCount">0</span>)</span>
+    </button>
+  </div>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Footer & Informações da Loja Física -->
+  <footer class="site-footer" id="sobre-loja">
+    <div class="container">
+      <div class="footer-grid">
+        <!-- Sobre a Loja -->
+        <div>
+          <div class="footer-brand-title">KÁTIA VARIEDADES</div>
+          <p class="footer-desc">
+            Moda feminina, masculina, infantil e lingeries das melhores marcas. Atendimento acolhedor, entregas em Mossoró e região com pedidos rápidos pelo WhatsApp.
+          </p>
+          <div style="margin-top: 1rem; display: flex; align-items: center; gap: 0.6rem;">
+            <a href="https://instagram.com/katia._variedades" target="_blank" rel="noopener noreferrer" class="btn-secondary" style="font-size: 0.75rem; padding: 0.4rem 0.85rem; border-radius: var(--radius-full);">
+              <i data-lucide="instagram" style="width: 14px; height: 14px; color: var(--gold);"></i>
+              <span>@katia._variedades</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Endereço & Horários -->
+        <div>
+          <h4 class="footer-heading">Loja Física & Horários</h4>
+          <ul class="footer-links" style="font-size: 0.85rem; color: var(--text-secondary);">
+            <li style="display: flex; align-items: flex-start; gap: 0.4rem;">
+              <i data-lucide="map-pin" style="width: 15px; height: 15px; color: var(--gold); flex-shrink: 0; margin-top: 2px;"></i>
+              <span>Rua Tabelião Aoem Menescal, 64 - Santo Antônio, Mossoró - RN</span>
+            </li>
+            <li style="display: flex; align-items: flex-start; gap: 0.4rem; margin-top: 0.4rem;">
+              <i data-lucide="clock" style="width: 15px; height: 15px; color: var(--gold); flex-shrink: 0; margin-top: 2px;"></i>
+              <div>
+                <div>Seg a Sex: 08:00 às 12:00 | 14:30 às 18:30</div>
+                <div>Sábado: 08:00 às 13:00</div>
+              </div>
+            </li>
+            <li style="display: flex; align-items: center; gap: 0.4rem; margin-top: 0.4rem;">
+              <i data-lucide="credit-card" style="width: 15px; height: 15px; color: var(--gold);"></i>
+              <span>PIX, Cartão (Débito/Crédito) e Dinheiro</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Atendimento & Gestão -->
+        <div>
+          <h4 class="footer-heading">Atendimento & Pedidos</h4>
+          <ul class="footer-links">
+            <li>
+              <a href="#" id="footerWhatsappLink" class="text-gold" style="display: inline-flex; align-items: center; gap: 0.4rem; font-weight: 600;">
+                <i data-lucide="message-circle" style="width: 15px; height: 15px;"></i>
+                <span>WhatsApp: (84) 98841-6094</span>
+              </a>
+            </li>
+            <li style="color: var(--text-secondary); font-size: 0.8rem; margin-top: 0.3rem;">
+              <span>🛵 Fazemos entregas em Mossoró e região</span>
+            </li>
+            <li style="margin-top: 0.85rem;">
+              <a href="admin.html" class="text-gold-light" style="display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.78rem; font-weight: 500; opacity: 0.9;">
+                <i data-lucide="sliders-horizontal" style="width: 14px; height: 14px; color: var(--gold);"></i>
+                <span>Acessar Painel de Gestão da Loja</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div>
+          © 2026 Kátia Variedades — Todos os direitos reservados • Mossoró / RN.
+        </div>
+        <div style="color: var(--gold-light); font-size: 0.72rem; letter-spacing: 0.05em;">
+          MODA • QUALIDADE • VARIEDADES
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- App Scripts -->
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
