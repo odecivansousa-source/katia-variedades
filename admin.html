@@ -8,6 +8,9 @@
   
   <title>Kátia Variedades — Painel de Gerenciamento da Loja</title>
 
+  <link rel="icon" type="image/png" href="images/logo-circle.png">
+  <link rel="apple-touch-icon" href="images/logo-circle.png">
+
   <!-- Google Fonts: Cormorant Garamond & Plus Jakarta Sans -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -35,12 +38,15 @@
     <div class="container">
       <div class="admin-navbar">
         <div class="admin-brand-group">
-          <a href="index.html" class="brand" aria-label="Voltar à Vitrine">
-            <div class="brand-title">
-              <span>KÁTIA</span>
-              <span class="brand-dot"></span>
+          <a href="index.html" class="brand" aria-label="Voltar à Vitrine" style="display: flex; align-items: center; gap: 0.65rem; text-decoration: none;">
+            <img src="images/logo-circle.png" alt="Logo Kátia Variedades" style="width: 38px; height: 38px; border-radius: 50%; object-fit: cover; border: 1.5px solid #C6A15B; box-shadow: 0 0 10px rgba(198, 161, 91, 0.25);">
+            <div>
+              <div class="brand-title">
+                <span>KÁTIA</span>
+                <span class="brand-dot"></span>
+              </div>
+              <span class="brand-subtitle">VARIEDADES • PAINEL</span>
             </div>
-            <span class="brand-subtitle">VARIEDADES • PAINEL</span>
           </a>
           <span class="admin-tag">Gerenciar Loja</span>
         </div>
@@ -514,6 +520,6 @@
   </footer>
 
   <!-- Admin Application Script -->
-  <script type="module" src="js/admin.js?v=2.2"></script>
+  <script type="module" src="js/admin.js?v=2.3"></script>
 </body>
 </html>
