@@ -61,6 +61,17 @@ class CatalogApp {
         this.dom.heroCoverImg.src = e.detail.settings.heroBannerImage;
       }
     });
+
+    // Atualiza vitrine quando os produtos forem sincronizados com a nuvem
+    window.addEventListener('aurum_products_updated', () => {
+      this.products = this.productService.getActive();
+      this.renderProducts();
+    });
+
+    // Sincroniza em segundo plano com o Supabase Cloud
+    if (typeof this.productService.syncFromCloud === 'function') {
+      this.productService.syncFromCloud();
+    }
   }
 
   cacheDom() {

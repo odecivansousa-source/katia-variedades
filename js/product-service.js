@@ -1,5 +1,5 @@
 // Aurum / Kátia Variedades - Camada de Serviços e Repositório de Produtos
-// Abstrai a persistência para permitir substituição futura por API/Banco sem afetar a UI
+// Abstrai a persistência e integra sincronização em nuvem com Supabase
 import { PRODUCTS as INITIAL_PRODUCTS, STORE_CONFIG } from './data.js';
 
 const STORAGE_KEY = 'katia_variedades_products_v3';
@@ -7,6 +7,61 @@ const SETTINGS_KEY = 'katia_variedades_settings_v1';
 const AUTH_KEY = 'katia_admin_auth_v1';
 const PASS_HASH_KEY = 'katia_admin_pwd_hash_v1';
 const SALT = 'katia_boutique_salt_2026';
+
+// Configuração do Supabase Cloud
+const SUPABASE_URL = 'https://owzamemhgbmrqmwlkqcc.supabase.co';
+const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im93emFtZW1oZ2JtcnFtd2xrcWNjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA1NTU3MzcsImV4cCI6MjEwNjEzMTczN30.cdd9aw9VhaPKiEIjwQ1edqDlI2PScFf2SihkxxAoY_s';
+
+export function getSupabase() {
+  if (typeof window !== 'undefined' && window.supabase && typeof window.supabase.createClient === 'function') {
+    if (!window._supabaseInstance) {
+      window._supabaseInstance = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+    }
+    return window._supabaseInstance;
+  }
+  return null;
+}
+
+function mapFromDb(row) {
+  return {
+    id: row.id,
+    name: row.name,
+    category: row.category,
+    price: parseFloat(row.price),
+    originalPrice: row.original_price ? parseFloat(row.original_price) : null,
+    isNew: !!row.is_new,
+    isFeatured: !!row.is_featured,
+    badge: row.badge,
+    description: row.description || '',
+    composition: row.composition || '',
+    image: row.image,
+    sizes: Array.isArray(row.sizes) ? row.sizes : ['Único'],
+    colors: Array.isArray(row.colors) ? row.colors : [{ name: 'Padrão', hex: '#1C1B1A' }],
+    isActive: !!row.is_active,
+    createdAt: row.created_at,
+    updatedAt: row.updated_at
+  };
+}
+
+function mapToDb(item) {
+  return {
+    id: item.id,
+    name: item.name,
+    category: item.category,
+    price: item.price,
+    original_price: item.originalPrice || null,
+    is_new: item.isNew !== undefined ? item.isNew : true,
+    is_featured: item.isFeatured !== undefined ? item.isFeatured : false,
+    badge: item.badge || null,
+    description: item.description || '',
+    composition: item.composition || '',
+    image: item.image || '',
+    sizes: item.sizes || ['Único'],
+    colors: item.colors || [{ name: 'Padrão', hex: '#1C1B1A' }],
+    is_active: item.isActive !== undefined ? item.isActive : true,
+    updated_at: new Date().toISOString()
+  };
+}
 
 export const ProductService = {
   /**
@@ -72,16 +127,86 @@ export const ProductService = {
   },
 
   /**
+   * Sincroniza catálogo e configurações da nuvem (Supabase)
+   */
+  async syncFromCloud() {
+    const sb = getSupabase();
+    if (!sb) return false;
+    try {
+      const { data: dbProducts, error: prodErr } = await sb
+        .from('katia_products')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (!prodErr && Array.isArray(dbProducts) && dbProducts.length > 0) {
+        const mapped = dbProducts.map(mapFromDb);
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(mapped));
+        if (typeof window !== 'undefined') {
+          window.dispatchEvent(new CustomEvent('aurum_products_updated', { detail: { products: mapped } }));
+        }
+      }
+
+      const { data: dbSettings, error: settErr } = await sb
+        .from('katia_settings')
+        .select('*')
+        .eq('id', 'store_config')
+        .single();
+
+      if (!settErr && dbSettings) {
+        const settings = {
+          heroBannerImage: dbSettings.hero_banner_image,
+          logoImage: dbSettings.logo_image,
+          storeName: dbSettings.store_name,
+          updatedAt: dbSettings.updated_at
+        };
+        localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
+        if (typeof window !== 'undefined') {
+          window.dispatchEvent(new CustomEvent('katia_settings_updated', { detail: { settings } }));
+        }
+      }
+      return true;
+    } catch (e) {
+      console.warn('Sincronização em nuvem Supabase:', e);
+      return false;
+    }
+  },
+
+  /**
+   * Envia uma foto diretamente para o Supabase Storage (Bucket katia-catalog)
+   */
+  async uploadImageToStorage(file) {
+    const sb = getSupabase();
+    if (!sb || !file) return null;
+    try {
+      const ext = file.name ? file.name.split('.').pop() : 'jpg';
+      const fileName = `foto_${Date.now()}_${Math.random().toString(36).substring(2, 7)}.${ext}`;
+      const { data, error } = await sb.storage
+        .from('katia-catalog')
+        .upload(fileName, file, { cacheControl: '3600', upsert: true });
+
+      if (error) {
+        console.warn('Erro ao subir imagem no Supabase Storage:', error);
+        return null;
+      }
+      const { data: urlData } = sb.storage.from('katia-catalog').getPublicUrl(fileName);
+      return urlData?.publicUrl || null;
+    } catch (e) {
+      console.warn('Falha no upload do Supabase Storage:', e);
+      return null;
+    }
+  },
+
+  /**
    * Cadastra um novo produto
    */
   create(data) {
     const products = this.getAll();
-    const newId = 'aurum-' + Date.now().toString(36) + '-' + Math.random().toString(36).substr(2, 5);
+    const newId = 'katia-' + Date.now().toString(36) + '-' + Math.random().toString(36).substr(2, 5);
 
     const newProduct = {
       id: newId,
       name: data.name.trim(),
-      category: data.category || 'vestidos',
+      category: data.category || 'feminino',
       price: parseFloat(data.price) || 0,
       originalPrice: data.originalPrice ? parseFloat(data.originalPrice) : null,
       isNew: data.isNew !== undefined ? !!data.isNew : true,
@@ -99,6 +224,15 @@ export const ProductService = {
 
     products.unshift(newProduct); // Novo item no início do catálogo
     this._saveAll(products);
+
+    // Envio assíncrono para o Supabase Cloud
+    const sb = getSupabase();
+    if (sb) {
+      sb.from('katia_products').insert(mapToDb(newProduct)).then(({ error }) => {
+        if (error) console.warn('Erro ao sincronizar novo produto no Supabase:', error);
+      });
+    }
+
     return newProduct;
   },
 
@@ -132,6 +266,15 @@ export const ProductService = {
 
     products[index] = updated;
     this._saveAll(products);
+
+    // Atualização assíncrona no Supabase Cloud
+    const sb = getSupabase();
+    if (sb) {
+      sb.from('katia_products').update(mapToDb(updated)).eq('id', id).then(({ error }) => {
+        if (error) console.warn('Erro ao atualizar produto no Supabase:', error);
+      });
+    }
+
     return updated;
   },
 
@@ -146,6 +289,15 @@ export const ProductService = {
     product.isActive = !product.isActive;
     product.updatedAt = new Date().toISOString();
     this._saveAll(products);
+
+    // Atualização assíncrona no Supabase Cloud
+    const sb = getSupabase();
+    if (sb) {
+      sb.from('katia_products').update({ is_active: product.isActive, updated_at: product.updatedAt }).eq('id', id).then(({ error }) => {
+        if (error) console.warn('Erro ao atualizar status no Supabase:', error);
+      });
+    }
+
     return product;
   },
 
@@ -158,6 +310,15 @@ export const ProductService = {
     if (filtered.length === products.length) return false;
 
     this._saveAll(filtered);
+
+    // Remoção assíncrona no Supabase Cloud
+    const sb = getSupabase();
+    if (sb) {
+      sb.from('katia_products').delete().eq('id', id).then(({ error }) => {
+        if (error) console.warn('Erro ao excluir produto no Supabase:', error);
+      });
+    }
+
     return true;
   },
 
@@ -209,6 +370,21 @@ export const ProductService = {
       if (typeof window !== 'undefined') {
         window.dispatchEvent(new CustomEvent('katia_settings_updated', { detail: { settings: updated } }));
       }
+
+      // Sincronização assíncrona no Supabase Cloud
+      const sb = getSupabase();
+      if (sb) {
+        sb.from('katia_settings').upsert({
+          id: 'store_config',
+          hero_banner_image: updated.heroBannerImage,
+          logo_image: updated.logoImage,
+          store_name: updated.storeName,
+          updated_at: new Date().toISOString()
+        }).then(({ error }) => {
+          if (error) console.warn('Erro ao atualizar configurações no Supabase:', error);
+        });
+      }
+
       return updated;
     } catch (e) {
       console.error('Erro ao salvar configurações da loja:', e);

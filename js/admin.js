@@ -48,6 +48,15 @@ class AdminApp {
     this.render();
     this.refreshIcons();
     this.checkAuthentication();
+
+    // Sincroniza alterações do Supabase Cloud em segundo plano
+    window.addEventListener('aurum_products_updated', () => {
+      this.render();
+    });
+
+    if (typeof this.service.syncFromCloud === 'function') {
+      this.service.syncFromCloud();
+    }
   }
 
   cacheDom() {
@@ -336,12 +345,13 @@ class AdminApp {
     }
   }
 
-  processImageFile(file) {
+  async processImageFile(file) {
     if (!file.type.startsWith('image/')) {
       this.showToast('Por favor, selecione um arquivo de imagem válido.');
       return;
     }
 
+    // Pré-visualização instantânea local
     const reader = new FileReader();
     reader.onload = (e) => {
       const dataUrl = e.target.result;
@@ -350,6 +360,14 @@ class AdminApp {
       this.updatePhotoPreview(dataUrl);
     };
     reader.readAsDataURL(file);
+
+    // Upload em nuvem para o Supabase Storage
+    if (typeof this.service.uploadImageToStorage === 'function') {
+      const publicUrl = await this.service.uploadImageToStorage(file);
+      if (publicUrl) {
+        this.state.formImage = publicUrl;
+      }
+    }
   }
 
   updatePhotoPreview(src) {
@@ -847,7 +865,7 @@ class AdminApp {
     document.body.style.overflow = '';
   }
 
-  processCoverImageFile(file) {
+  async processCoverImageFile(file) {
     if (!file.type.startsWith('image/')) {
       this.showToast('Por favor, selecione um arquivo de imagem válido.');
       return;
@@ -859,6 +877,15 @@ class AdminApp {
       this.dom.coverImageUrl.value = ''; // limpa URL se subiu arquivo
     };
     reader.readAsDataURL(file);
+
+    // Upload em nuvem para o Supabase Storage
+    if (typeof this.service.uploadImageToStorage === 'function') {
+      const publicUrl = await this.service.uploadImageToStorage(file);
+      if (publicUrl) {
+        this.dom.coverPreview.src = publicUrl;
+        this.dom.coverImageUrl.value = publicUrl;
+      }
+    }
   }
 
   handleResetCover() {
