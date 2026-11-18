@@ -2,7 +2,7 @@
 // Abstrai a persistência e integra sincronização em nuvem com Supabase
 import { PRODUCTS as INITIAL_PRODUCTS, STORE_CONFIG } from './data.js';
 
-const STORAGE_KEY = 'katia_variedades_products_v3';
+const STORAGE_KEY = 'katia_variedades_products_v4';
 const SETTINGS_KEY = 'katia_variedades_settings_v1';
 const AUTH_KEY = 'katia_admin_auth_v1';
 const PASS_HASH_KEY = 'katia_admin_pwd_hash_v1';

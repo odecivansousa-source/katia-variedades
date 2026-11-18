@@ -45,12 +45,12 @@ export const STORE_CONFIG = {
   categories: [
     { id: "todos", name: "Todas as Peças", icon: "sparkles" },
     { id: "destaques", name: "Destaques & Novidades", icon: "flame" },
+    { id: "cama-mesa-banho", name: "Cama, Mesa e Banho", icon: "home" },
     { id: "feminino", name: "Moda Feminina", icon: "shirt" },
     { id: "moda-intima", name: "Moda Íntima", icon: "heart" },
     { id: "masculino", name: "Moda Masculina", icon: "user" },
     { id: "infantil", name: "Infantil", icon: "baby" },
     { id: "juvenil", name: "Juvenil", icon: "smile" },
-    { id: "cama-mesa-banho", name: "Cama, Mesa e Banho", icon: "home" },
     { id: "praia-uv", name: "Moda Praia & UV", icon: "sun" }
   ]
 };
