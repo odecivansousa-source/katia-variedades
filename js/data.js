@@ -45,10 +45,12 @@ export const STORE_CONFIG = {
   categories: [
     { id: "todos", name: "Todas as Peças", icon: "sparkles" },
     { id: "destaques", name: "Destaques & Novidades", icon: "flame" },
-    { id: "feminino", name: "Feminino & Alfaiataria", icon: "shirt" },
-    { id: "lingerie", name: "Lingerie & Pijamas", icon: "heart" },
-    { id: "masculino", name: "Masculino & Casual", icon: "user" },
-    { id: "juvenil", name: "Juvenil & Infantil", icon: "smile" },
+    { id: "feminino", name: "Moda Feminina", icon: "shirt" },
+    { id: "moda-intima", name: "Moda Íntima", icon: "heart" },
+    { id: "masculino", name: "Moda Masculina", icon: "user" },
+    { id: "infantil", name: "Infantil", icon: "baby" },
+    { id: "juvenil", name: "Juvenil", icon: "smile" },
+    { id: "cama-mesa-banho", name: "Cama, Mesa e Banho", icon: "home" },
     { id: "praia-uv", name: "Moda Praia & UV", icon: "sun" }
   ]
 };
@@ -114,7 +116,7 @@ export const PRODUCTS = [
   {
     id: "katia-04",
     name: "Conjunto Lingerie Renda Sofisticada Diamantes",
-    category: "lingerie",
+    category: "moda-intima",
     price: 149.90,
     originalPrice: 179.90,
     isNew: true,
@@ -133,7 +135,7 @@ export const PRODUCTS = [
   {
     id: "katia-05",
     name: "Conjunto Lingerie Sustentação Conforto Plus Size",
-    category: "lingerie",
+    category: "moda-intima",
     price: 159.90,
     originalPrice: null,
     isNew: false,
@@ -171,17 +173,17 @@ export const PRODUCTS = [
   },
   {
     id: "katia-07",
-    name: "Conjunto Infantil/Juvenil Dry Fit Esportivo",
-    category: "juvenil",
+    name: "Conjunto Infantil Dry Fit Esportivo",
+    category: "infantil",
     price: 89.90,
     originalPrice: 109.90,
     isNew: true,
     isFeatured: false,
-    badge: "Dry Fit",
+    badge: "Infantil",
     description: "Conjunto camiseta e bermuda esportiva em malha tecnológica dry fit leve e respirável com faixas contrastantes. Ideal para esportes, passeios e momentos de lazer com máxima liberdade.",
     composition: "100% Poliéster Dry Fit",
     image: "images/feed-moda-masculina.jpg",
-    sizes: ["8", "10", "12", "14", "16"],
+    sizes: ["4", "6", "8", "10", "12"],
     colors: [
       { name: "Preto com Branco", hex: "#1A1A1A" },
       { name: "Vermelho Esportivo", hex: "#B92525" },
@@ -218,7 +220,7 @@ export const PRODUCTS = [
     description: "Look completo com bermuda cargo utilitária com fitas de ajuste e camiseta básica penteada com caimento perfeito. Conforto total para o dia a dia e passeios com os amigos.",
     composition: "Bermuda Sarja Leve e Camiseta 100% Algodão",
     image: "images/conjunto-cargo-juvenil.jpg",
-    sizes: ["8", "10", "12", "14", "16"],
+    sizes: ["10", "12", "14", "16"],
     colors: [
       { name: "Bermuda Bege & T-shirt Marinho", hex: "#B8A082" },
       { name: "Bermuda Preta & T-shirt Vermelha", hex: "#1C1C1E" },
@@ -228,7 +230,7 @@ export const PRODUCTS = [
   {
     id: "katia-10",
     name: "Camisola Especial Amamentação Rendada Romântica",
-    category: "lingerie",
+    category: "moda-intima",
     price: 119.90,
     originalPrice: 139.90,
     isNew: true,
@@ -246,26 +248,25 @@ export const PRODUCTS = [
   },
   {
     id: "katia-11",
-    name: "Camiseta Streetwear Juvenil Oversized MATZ",
-    category: "juvenil",
+    name: "Kit 3 Cuecas Boxer Microfibra Sem Costura Hibisco",
+    category: "moda-intima",
     price: 79.90,
-    originalPrice: null,
-    isNew: true,
+    originalPrice: 95.00,
+    isNew: false,
     isFeatured: false,
-    badge: "MATZ Street",
-    description: "Camiseta modelo streetwear com caimento amplo e estampa em silk-screen de alta durabilidade nas costas (Bear Urban). Algodão macio 30.1 penteado com gola reforçada pespontada.",
-    composition: "100% Algodão Penteado 30.1",
+    badge: "Moda Íntima",
+    description: "Kit com 3 cuecas boxer originais Hibisco / Equipaggio. Confeccionadas sem costura nas laterais com elástico largo anatômico personalizado que não enrola na cintura.",
+    composition: "Microfibra Macia 92% Poliamida, 8% Elastano",
     image: "images/feed-moda-masculina.jpg",
-    sizes: ["10", "12", "14", "16"],
+    sizes: ["P", "M", "G", "GG"],
     colors: [
-      { name: "Preto Noite", hex: "#151515" },
-      { name: "Branco Neve", hex: "#F7F6F2" }
+      { name: "Kit Preto, Marinho e Grafite", hex: "#22252A" }
     ]
   },
   {
     id: "katia-12",
     name: "Jogo de Toalhas de Banho Aveludadas Fendi & Grafite",
-    category: "feminino",
+    category: "cama-mesa-banho",
     price: 89.90,
     originalPrice: null,
     isNew: true,
