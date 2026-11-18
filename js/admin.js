@@ -179,7 +179,12 @@ class AdminApp {
     this.dom.formCloseBtn?.addEventListener('click', () => this.closeFormModal());
     this.dom.btnCancelForm?.addEventListener('click', () => this.closeFormModal());
     this.dom.formModal?.addEventListener('click', (e) => {
-      if (e.target === this.dom.formModal) this.closeFormModal();
+      // Proteção: Clicar fora da caixa de diálogo NÃO fecha o modal para evitar perda acidental de dados
+      if (e.target === this.dom.formModal) {
+        e.preventDefault();
+        e.stopPropagation();
+        this.pulseModalCard(this.dom.formModal);
+      }
     });
 
     // Form Submit
@@ -287,7 +292,11 @@ class AdminApp {
     this.dom.coverModalCloseBtn?.addEventListener('click', () => this.closeCoverModal());
     this.dom.btnCancelCover?.addEventListener('click', () => this.closeCoverModal());
     this.dom.coverModal?.addEventListener('click', (e) => {
-      if (e.target === this.dom.coverModal) this.closeCoverModal();
+      if (e.target === this.dom.coverModal) {
+        e.preventDefault();
+        e.stopPropagation();
+        this.pulseModalCard(this.dom.coverModal);
+      }
     });
 
     this.dom.coverFileInput?.addEventListener('change', (e) => {
@@ -310,7 +319,11 @@ class AdminApp {
     this.dom.changePassCloseBtn?.addEventListener('click', () => this.closeChangePassModal());
     this.dom.btnCancelChangePass?.addEventListener('click', () => this.closeChangePassModal());
     this.dom.changePassModal?.addEventListener('click', (e) => {
-      if (e.target === this.dom.changePassModal) this.closeChangePassModal();
+      if (e.target === this.dom.changePassModal) {
+        e.preventDefault();
+        e.stopPropagation();
+        this.pulseModalCard(this.dom.changePassModal);
+      }
     });
 
     this.dom.changePassForm?.addEventListener('submit', (e) => {
@@ -321,10 +334,15 @@ class AdminApp {
     // Keyboard ESC
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
-        this.closeFormModal();
-        this.closeConfirmDialog();
-        this.closeCoverModal();
-        this.closeChangePassModal();
+        if (this.dom.formModal?.classList.contains('active')) {
+          this.closeFormModal();
+        } else if (this.dom.coverModal?.classList.contains('active')) {
+          this.closeCoverModal();
+        } else if (this.dom.changePassModal?.classList.contains('active')) {
+          this.closeChangePassModal();
+        } else if (this.dom.confirmDialog?.classList.contains('active')) {
+          this.closeConfirmDialog();
+        }
       }
     });
   }
@@ -610,7 +628,47 @@ class AdminApp {
     this.dom.fieldName.focus();
   }
 
-  closeFormModal() {
+  // Animação de aviso visual quando o usuário clica fora do modal
+  pulseModalCard(modalEl) {
+    if (!modalEl) return;
+    const card = modalEl.querySelector('.admin-modal-card');
+    if (card) {
+      card.classList.remove('shake');
+      void card.offsetWidth; // Força reflow para reiniciar animação
+      card.classList.add('shake');
+      setTimeout(() => card.classList.remove('shake'), 400);
+    }
+  }
+
+  // Verifica se há dados preenchidos pelo usuário no formulário
+  hasUnsavedFormData() {
+    if (!this.dom.formModal?.classList.contains('active')) return false;
+
+    if (this.state.editingId) {
+      const p = this.service.getById(this.state.editingId);
+      if (!p) return false;
+      const isDirty = (
+        (this.dom.fieldName?.value || '').trim() !== (p.name || '') ||
+        parseFloat(this.dom.fieldPrice?.value) !== p.price ||
+        this.dom.fieldCategory?.value !== p.category ||
+        (this.state.formImage && this.state.formImage !== p.image) ||
+        (this.dom.fieldDesc?.value || '').trim() !== (p.description || '')
+      );
+      return isDirty;
+    } else {
+      const name = this.dom.fieldName?.value?.trim() || '';
+      const price = this.dom.fieldPrice?.value?.trim() || '';
+      const desc = this.dom.fieldDesc?.value?.trim() || '';
+      const hasImage = Boolean(this.state.formImage);
+      return Boolean(name || price || desc || hasImage);
+    }
+  }
+
+  closeFormModal(force = false) {
+    if (!force && this.hasUnsavedFormData()) {
+      const confirmLeave = window.confirm('Você começou a preencher os dados deste produto. Tem certeza que deseja fechar a janela e descartar as alterações?');
+      if (!confirmLeave) return;
+    }
     this.dom.formModal.classList.remove('active');
     document.body.style.overflow = '';
   }
@@ -727,7 +785,7 @@ class AdminApp {
       }
     }
 
-    this.closeFormModal();
+    this.closeFormModal(true);
     this.render();
   }
 

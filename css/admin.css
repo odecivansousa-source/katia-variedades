@@ -488,6 +488,19 @@
   transform: translateY(0) scale(1);
 }
 
+/* Proteção contra fechamento acidental: pulso visual ao clicar no fundo */
+@keyframes adminModalPulse {
+  0%, 100% { transform: translateY(0) scale(1); box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8); }
+  25% { transform: translateY(-3px) scale(1.008); box-shadow: 0 20px 60px rgba(198, 161, 91, 0.25); border-color: var(--gold); }
+  50% { transform: translateY(2px) scale(0.995); box-shadow: 0 20px 60px rgba(198, 161, 91, 0.35); border-color: var(--gold); }
+  75% { transform: translateY(-1px) scale(1.004); box-shadow: 0 20px 60px rgba(198, 161, 91, 0.2); }
+}
+
+.admin-modal-card.shake {
+  animation: adminModalPulse 0.35s cubic-bezier(0.25, 1, 0.5, 1) !important;
+  border-color: var(--gold) !important;
+}
+
 .admin-modal-header {
   padding: 1.25rem 1.75rem;
   border-bottom: 1px solid var(--border);
