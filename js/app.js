@@ -415,6 +415,7 @@ class CatalogApp {
             alt="${product.name}" 
             class="card-img" 
             loading="lazy" 
+            decoding="async" 
             onerror="if (this.dataset.fallback !== '1') { this.dataset.fallback = '1'; this.src = window.AURUM_FALLBACK_IMG; }"
           >
           ${product.badge ? `<span class="card-badge">${product.badge}</span>` : ''}
